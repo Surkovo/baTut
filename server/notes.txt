@@ -1,0 +1,7 @@
+npm init -y to install and say yes to everything
+yarn add -D @types/node typescript  <- this add typescript to the project
+yarn add -D ts-node   
+npx tsconfig.json  <- this gets ben's tsconfig from npm, then select nodejs for the server
+create a src folder then an index.ts to align with the start script in the package.json
+run yarn start to run the script
+add "watch" script to the package.json. "tsc -w" runs typescript with the watch command. this compiles the code and puts it in a new dist folder
