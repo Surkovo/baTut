@@ -4,4 +4,6 @@ yarn add -D ts-node
 npx tsconfig.json  <- this gets ben's tsconfig from npm, then select nodejs for the server
 create a src folder then an index.ts to align with the start script in the package.json
 run yarn start to run the script
-add "watch" script to the package.json. "tsc -w" runs typescript with the watch command. this compiles the code and puts it in a new dist folder
+add "watch" script to the package.json. "tsc -w" runs typescript with the watch command. this compiles the code and puts it in a new dist hello. this makes typescript keep recompiling the code 
+now in a new terminal run node dist/index.js to run the code
+add new start script to the package.json. rename the old one to start2 
