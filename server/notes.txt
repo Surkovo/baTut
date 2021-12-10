@@ -7,3 +7,8 @@ run yarn start to run the script
 add "watch" script to the package.json. "tsc -w" runs typescript with the watch command. this compiles the code and puts it in a new dist hello. this makes typescript keep recompiling the code 
 now in a new terminal run node dist/index.js to run the code
 add new start script to the package.json. rename the old one to start2 
+add nodemon to project. added script to package.json
+add mikroORM 
+yarn add @mikro-orm/cli @mikro-orm/core @mikro-orm/migrations @mikro-orm/postgresql
+yarn add pg
+created data base in new terminal CREATE DATABASE batut;
