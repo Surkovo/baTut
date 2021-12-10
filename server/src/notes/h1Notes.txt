@@ -12,3 +12,11 @@ add mikroORM
 yarn add @mikro-orm/cli @mikro-orm/core @mikro-orm/migrations @mikro-orm/postgresql
 yarn add pg
 created data base in new terminal CREATE DATABASE batut;
+TIP: use control space to see options and autocomplete.
+added options to the mikro init. debug shows the postgresql commands that mikroORM is running. 
+create constants.ts file for things
+create an entities folder. this is where the entities/dbtables will live
+go to the mikroORM docs and copy the entity class based example for the Post.ts entity
+set up the mikro cli to create tables. copy the package.json bit listed here https://mikro-orm.io/docs/installation/#setting-up-the-commandline-tool
+create the config for mikroORM in where it lists it in the package.json. we do so we can access properties within the CLI
+TIP use command period to import all missiing imports
