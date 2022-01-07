@@ -20,3 +20,6 @@ go to the mikroORM docs and copy the entity class based example for the Post.ts 
 set up the mikro cli to create tables. copy the package.json bit listed here https://mikro-orm.io/docs/installation/#setting-up-the-commandline-tool
 create the config for mikroORM in where it lists it in the package.json. we do so we can access properties within the CLI
 TIP use command period to import all missiing imports
+run npx mikro-orm migration:create to create a migration. 
+added types the the post entity.
+I had to manually move the migrations folder out of the dis to the src folder for it to work
