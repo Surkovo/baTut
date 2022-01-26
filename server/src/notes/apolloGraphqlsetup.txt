@@ -1,3 +1,5 @@
 yarn add express apollo-server-express graphql type-graphql
 yarn add -D @types/express
 had to nvm install node16 then nvm use node 16 for graphql to install correctly
+add resolvers folder and file for the graphql to build its schema
+had to install specific version of graphql for apollo to work. version 15.3

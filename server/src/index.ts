@@ -3,6 +3,9 @@ import { __prod__ } from './constants';
 import { Post } from './entities/Post';
 import mikroConfig from './mikro-orm.config';
 import express from 'express';
+import { ApolloServer } from 'apollo-server-express';
+import { buildSchema } from 'type-graphql';
+import { HelloResolver } from './resolvers/hello';
 //creating a main function since there is no top level await
 const main = async () => {
   const orm = await MikroORM.init(mikroConfig); //connect to the db
@@ -11,8 +14,11 @@ const main = async () => {
   // await orm.em.persistAndFlush(post); // this is what inserts to the DB
 
   const app = express();
-  app.get('/', (_, res) => {
-    res.send('helloo');
+  const apolloServer = new ApolloServer({
+    schema: await buildSchema({
+      resolvers: [HelloResolver],
+      validate: false,
+    }),
   });
   app.listen(4000, () => {
     console.log(`server  running on port 4000`);
