@@ -3,3 +3,6 @@ yarn add -D @types/express
 had to nvm install node16 then nvm use node 16 for graphql to install correctly
 add resolvers folder and file for the graphql to build its schema
 had to install specific version of graphql for apollo to work. version 15.3
+pass in the schema to the array in the index file. 
+if you want to test queries go to localhost/graphql 
+yarn add reflect metadata and import it into the index file
