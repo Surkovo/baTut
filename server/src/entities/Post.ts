@@ -4,7 +4,7 @@ import { Field, Int, ObjectType } from 'type-graphql';
 @ObjectType() //This turns a graphQL class into a type
 @Entity()
 export class Post {
-  @Field(() => Int) //this exposes this column to our graphql schema. need to define the type for graphql
+  @Field(() => Int) //this exposes this column to our graphql schema, without the filed decorator it won't return the field. need to define the type for graphql
   @PrimaryKey()
   id!: number;
 
