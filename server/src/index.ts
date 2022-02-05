@@ -7,6 +7,7 @@ import { ApolloServer } from 'apollo-server-express';
 import { buildSchema } from 'type-graphql';
 import { HelloResolver } from './resolvers/hello';
 import { PostResolver } from './resolvers/post';
+import { UserResolver } from './resolvers/user';
 //creating a main function since there is no top level await
 const main = async () => {
   const orm = await MikroORM.init(mikroConfig); //connect to the db
@@ -17,7 +18,7 @@ const main = async () => {
   const app = express();
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [HelloResolver, PostResolver],
+      resolvers: [HelloResolver, PostResolver, UserResolver],
       validate: false,
     }),
     context: () => ({ em: orm.em }), // this is a specially object that is accessible for all the resolvers. it's a function that returns the obejct for the conte
