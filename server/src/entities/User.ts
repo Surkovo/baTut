@@ -16,9 +16,9 @@ export class User {
   @Property({ type: 'date', onUpdate: () => new Date() })
   updatedAt: Date = new Date();
 
-  @Field() // strings types can be inferred by graphql
-  @Property({ type: 'text' })
-  title!: string;
+  @Field()
+  @Property({ type: 'text', unique: true })
+  username!: string;
 
   @Property({ type: 'text' })
   password!: string;

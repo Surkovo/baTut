@@ -17,6 +17,6 @@ exports.default = {
     user: 'kylejohnson',
     password: 'rooster20',
     type: 'postgresql',
-    debug: constants_1.__prod__,
+    debug: !constants_1.__prod__,
 };
 //# sourceMappingURL=mikro-orm.config.js.map
