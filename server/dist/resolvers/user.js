@@ -35,7 +35,7 @@ UserNamePasswordInput = __decorate([
 let FieldError = class FieldError {
 };
 __decorate([
-    (0, type_graphql_1.Field)(() => [Error], { nullable: true }),
+    (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
 ], FieldError.prototype, "field", void 0);
 __decorate([
@@ -91,7 +91,7 @@ let UserResolver = class UserResolver {
                 ],
             };
         }
-        return user;
+        return { user };
     }
 };
 __decorate([

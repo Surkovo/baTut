@@ -21,7 +21,7 @@ class UserNamePasswordInput {
 }
 @ObjectType() //Object types are something we return
 class FieldError {
-  @Field(() => [Error], { nullable: true })
+  @Field()
   field: string;
 
   @Field()
@@ -30,7 +30,7 @@ class FieldError {
 @ObjectType() //Object types are something we return
 class UserResponse {
   @Field(() => [FieldError], { nullable: true })
-  errors: FieldError[];
+  errors?: FieldError[];
 
   @Field(() => User, { nullable: true })
   user?: User;
@@ -67,7 +67,7 @@ export class UserResolver {
         ],
       };
     }
-    const valid = await argon2.verify(user.password, options.password); //get the user password from the db once we findone, and the options.password is coming from the user input
+    const valid = await argon2.verify(user.password, options.password); //get the user password from the db once we findO ne, and the options.password is coming from the user input
     if (!valid) {
       return {
         errors: [
@@ -78,6 +78,6 @@ export class UserResolver {
         ],
       };
     }
-    return user;
+    return { user };
   }
 }
