@@ -38,19 +38,54 @@ class UserResponse {
 
 @Resolver()
 export class UserResolver {
-  @Mutation(() => User)
+  @Mutation(() => UserResponse)
   async register(
     @Arg('options') options: UserNamePasswordInput,
     @Ctx() { em }: MyContext
-  ) {
+  ): Promise<UserResponse> {
+    if (options.username.length <= 2) {
+      return {
+        errors: [
+          {
+            field: 'username',
+            message: 'username must be greater than 2 characters long',
+          },
+        ],
+      };
+    }
+    if (options.password.length <= 3) {
+      return {
+        errors: [
+          {
+            field: 'password',
+            message: 'password must be greater than 3 characters long',
+          },
+        ],
+      };
+    }
     const hashedPassword = await argon2.hash(options.password);
     const user = em.create(User, {
       username: options.username,
       password: hashedPassword,
     });
-    await em.persistAndFlush(user);
-    return user;
+    try {
+      await em.persistAndFlush(user); //the below error is custom. the error from the db would actually return that the id can't be null. it does this since if fail to create a user since there already a user with that name in the db.
+    } catch (err) {
+      if (err.code === '23505') {
+        //duplicated username error
+        return {
+          errors: [
+            {
+              field: 'username',
+              message: 'username already taken',
+            },
+          ],
+        };
+      }
+    }
+    return { user };
   }
+
   @Mutation(() => UserResponse)
   async login(
     @Arg('options') options: UserNamePasswordInput,

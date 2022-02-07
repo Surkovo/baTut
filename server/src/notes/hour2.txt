@@ -1,0 +1,3 @@
+add migration script to package.json. I had to add the new User entity to the mikrorom config for the migration script to work
+be sure move the newly create migration file from out of the dist/migration folder to the src/migration folder manually. Need to fix this.
+had to delete migrations and rerun a inital migration. ugh
