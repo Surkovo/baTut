@@ -8,6 +8,11 @@ import { buildSchema } from 'type-graphql';
 import { HelloResolver } from './resolvers/hello';
 import { PostResolver } from './resolvers/post';
 import { UserResolver } from './resolvers/user';
+import session from 'express-session';
+import connectRedis from 'connect-redis';
+// redis@v4
+import { createClient } from 'redis';
+
 //creating a main function since there is no top level await
 const main = async () => {
   const orm = await MikroORM.init(mikroConfig); //connect to the db
@@ -16,6 +21,19 @@ const main = async () => {
   // await orm.em.persistAndFlush(post); // this is what inserts to the DB
 
   const app = express();
+  const redisClient = createClient({ legacyMode: true });
+  const RedisStore = connectRedis(session);
+
+  redisClient.connect().catch(console.error);
+
+  app.use(
+    session({
+      store: new RedisStore({ client: redisClient }),
+      saveUninitialized: false,
+      secret: 'keyboard cat',
+      resave: false,
+    })
+  );
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
       resolvers: [HelloResolver, PostResolver, UserResolver],
