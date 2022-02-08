@@ -12,6 +12,9 @@ import session from 'express-session';
 import connectRedis from 'connect-redis';
 // redis@v4
 import { createClient } from 'redis';
+import dotenv from 'dotenv';
+import { MyContext } from './types';
+dotenv.config();
 
 //creating a main function since there is no top level await
 const main = async () => {
@@ -21,25 +24,32 @@ const main = async () => {
   // await orm.em.persistAndFlush(post); // this is what inserts to the DB
 
   const app = express();
-  const redisClient = createClient({ legacyMode: true });
+  const redisClient = createClient({ legacyMode: true }); // note that both the redis and the apollo server connection below should be both where wou declare the applyMiddleware. The order the have the middleware is the order in which it will run, so the session middleware will run before the apollo middleware
   const RedisStore = connectRedis(session);
 
   redisClient.connect().catch(console.error);
 
   app.use(
     session({
-      store: new RedisStore({ client: redisClient }),
+      name: 'qid',
+      store: new RedisStore({ client: redisClient, disableTouch: true }),
+      cookie: {
+        maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years lol
+        sameSite: 'lax', //csrf
+        httpOnly: true, // this ensures the frontend can not access the cookie,
+        secure: __prod__, // this ensures the cookie only works in https. set to only work in prod
+      },
       saveUninitialized: false,
-      secret: 'keyboard cat',
+      secret: `${process.env.JWT_TOKEN}`,
       resave: false,
-    })
+    }) //the disableTouch let the connection live on until we terminate it.
   );
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
       resolvers: [HelloResolver, PostResolver, UserResolver],
       validate: false,
     }),
-    context: () => ({ em: orm.em }), // this is a specially object that is accessible for all the resolvers. it's a function that returns the obejct for the conte
+    context: ({ req, res }): MyContext => ({ em: orm.em, req, res }), // this is a specially object that is accessible for all the resolvers. it's a function that returns the obejct for the context. we pass in the req and res object to give apollo server access to the session
   });
   await apolloServer.start(); //add to add this
   apolloServer.applyMiddleware({ app }); //this creates a grapghql endpoint for us.
