@@ -5,7 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
 const core_1 = require("@mikro-orm/core");
-const constants_1 = require("./constants");
 const mikro_orm_config_1 = __importDefault(require("./mikro-orm.config"));
 const express_1 = __importDefault(require("express"));
 const apollo_server_express_1 = require("apollo-server-express");
@@ -25,14 +24,15 @@ const main = async () => {
     const redisClient = (0, redis_1.createClient)({ legacyMode: true });
     const RedisStore = (0, connect_redis_1.default)(express_session_1.default);
     redisClient.connect().catch(console.error);
+    app.set('trust proxy', process.env.NODE_ENV !== 'production');
     app.use((0, express_session_1.default)({
         name: 'qid',
         store: new RedisStore({ client: redisClient, disableTouch: true }),
         cookie: {
             maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
-            sameSite: 'lax',
+            sameSite: 'none',
             httpOnly: true,
-            secure: constants_1.__prod__,
+            secure: true,
         },
         saveUninitialized: false,
         secret: `${process.env.JWT_TOKEN}`,
@@ -46,7 +46,10 @@ const main = async () => {
         context: ({ req, res }) => ({ em: orm.em, req, res }),
     });
     await apolloServer.start();
-    apolloServer.applyMiddleware({ app });
+    apolloServer.applyMiddleware({
+        app,
+        cors: { credentials: true, origin: 'https://studio.apollographql.com' },
+    });
     app.listen(4000, () => {
         console.log(`server running on port 4000`);
     });

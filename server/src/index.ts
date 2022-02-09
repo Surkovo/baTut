@@ -28,16 +28,16 @@ const main = async () => {
   const RedisStore = connectRedis(session);
 
   redisClient.connect().catch(console.error);
-
+  app.set('trust proxy', process.env.NODE_ENV !== 'production'); //added to make cookies work in apollo server
   app.use(
     session({
       name: 'qid',
       store: new RedisStore({ client: redisClient, disableTouch: true }),
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years lol
-        sameSite: 'lax', //csrf
+        sameSite: 'none', //csrf
         httpOnly: true, // this ensures the frontend can not access the cookie,
-        secure: __prod__, // this ensures the cookie only works in https. set to only work in prod
+        secure: true, // this ensures the cookie only works in https. set to only work in prod. UDPATED this to get the cookie to work, now set to true
       },
       saveUninitialized: false,
       secret: `${process.env.JWT_TOKEN}`,
@@ -52,7 +52,10 @@ const main = async () => {
     context: ({ req, res }): MyContext => ({ em: orm.em, req, res }), // this is a specially object that is accessible for all the resolvers. it's a function that returns the obejct for the context. we pass in the req and res object to give apollo server access to the session
   });
   await apolloServer.start(); //add to add this
-  apolloServer.applyMiddleware({ app }); //this creates a grapghql endpoint for us.
+  apolloServer.applyMiddleware({
+    app,
+    cors: { credentials: true, origin: 'https://studio.apollographql.com' },
+  }); //this creates a grapghql endpoint for us.
 
   // app.get('/', (_, res) => { .   // don't need this since we are using Graphql not REST
   //   res.send('HELLO');

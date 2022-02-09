@@ -4,4 +4,5 @@ had to delete migrations and rerun a inital migration. ugh
 go to https://redis.io/download to install redis and follow instructions to run the server. then add the following npm packages to the project yarn add redis connect-redis express-session
 get the types. yarn add -D @types/express-session 
 yarn add -D @types/connect-redis
-
+Check the cookies in the dev tools to see if the cookies in Redis session are being set correctly
+research the request.credentials problem. Solved added notes to the cookie in the index file also changed the headers within apollo studio to the following. x-forwarded-proto:   https

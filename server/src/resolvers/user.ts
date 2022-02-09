@@ -6,10 +6,12 @@ import {
   InputType,
   Ctx,
   ObjectType,
+  Query,
 } from 'type-graphql';
 import { MyContext } from '../types';
 import argon2 from 'argon2';
 import { User } from '../entities/User';
+import { emit } from 'process';
 
 @InputType() //creating class input in an alternative to using @args(). inputtypes are used for inputs
 class UserNamePasswordInput {
@@ -38,6 +40,16 @@ class UserResponse {
 
 @Resolver()
 export class UserResolver {
+  @Query(() => User, { nullable: true })
+  async me(@Ctx() { em, req }: MyContext) {
+    // you are not logged in
+    if (!req.session.userId) {
+      return null;
+    }
+    const user = await em.findOne(User, { id: req.session.userId });
+    return user;
+  }
+
   @Mutation(() => UserResponse)
   async register(
     @Arg('options') options: UserNamePasswordInput,
@@ -89,7 +101,7 @@ export class UserResolver {
   @Mutation(() => UserResponse)
   async login(
     @Arg('options') options: UserNamePasswordInput,
-    @Ctx() { em }: MyContext
+    @Ctx() { em, req }: MyContext //added the request object here from the sessions.
   ): Promise<UserResponse> {
     const user = await em.findOne(User, { username: options.username });
     if (!user) {
@@ -113,6 +125,7 @@ export class UserResolver {
         ],
       };
     }
+    req.session!.userId = user.id; //check the type.ts file to see more
     return { user };
   }
 }
