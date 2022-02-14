@@ -35,7 +35,7 @@ const main = async () => {
       store: new RedisStore({ client: redisClient, disableTouch: true }),
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years lol
-        sameSite: 'none', //csrf
+        sameSite: 'none', //csrf. UPDATED. Set this to none in order for secure: true to work below. See notes for more.
         httpOnly: true, // this ensures the frontend can not access the cookie,
         secure: true, // this ensures the cookie only works in https. set to only work in prod. UDPATED this to get the cookie to work, now set to true
       },

@@ -66,7 +66,7 @@ let UserResolver = class UserResolver {
         const user = await em.findOne(User_1.User, { id: req.session.userId });
         return user;
     }
-    async register(options, { em }) {
+    async register(options, { em, req }) {
         if (options.username.length <= 2) {
             return {
                 errors: [
@@ -107,6 +107,7 @@ let UserResolver = class UserResolver {
                 };
             }
         }
+        req.session.userId = user.id;
         return { user };
     }
     async login(options, { em, req }) {
