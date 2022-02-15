@@ -1,0 +1,2 @@
+yarn create next-app --example with-chakra-ui client
+yarn add --dev typescript @types/node    <- add this to the client to to get typescript to work
