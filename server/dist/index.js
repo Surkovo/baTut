@@ -48,7 +48,7 @@ const main = async () => {
     await apolloServer.start();
     apolloServer.applyMiddleware({
         app,
-        cors: { credentials: true, origin: 'https://studio.apollographql.com' },
+        cors: { credentials: true },
     });
     app.listen(4000, () => {
         console.log(`server running on port 4000`);

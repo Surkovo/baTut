@@ -3,3 +3,4 @@ yarn add --dev typescript @types/node    <- add this to the client to to get typ
 added snippets for react ts work by going to cmd+shift+p then type snippets, then scroll to typescriptreact and use the following in the link for the snippet: https://gist.githubusercontent.com/benawad/1e9dd01994f78489306fbfd6f7b01cd3/raw/018ca50069b12659ee4ba3ebdde0d1ac6a39dae0/snippets%257Ctypescriptreact.json
 
 yarn add formik <- add this to the client dir 
+yarn add urql graphql  <- this is for submitting graphql requests. adding graphql and urql to the client project

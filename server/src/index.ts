@@ -3,6 +3,7 @@ import { MikroORM } from '@mikro-orm/core';
 import { __prod__ } from './constants';
 import mikroConfig from './mikro-orm.config';
 import express from 'express';
+//import cors from 'cors';
 import { ApolloServer } from 'apollo-server-express';
 import { buildSchema } from 'type-graphql';
 import { HelloResolver } from './resolvers/hello';
@@ -24,6 +25,7 @@ const main = async () => {
   // await orm.em.persistAndFlush(post); // this is what inserts to the DB
 
   const app = express();
+  //app.use(cors());
   const redisClient = createClient({ legacyMode: true }); // note that both the redis and the apollo server connection below should be both where wou declare the applyMiddleware. The order the have the middleware is the order in which it will run, so the session middleware will run before the apollo middleware
   const RedisStore = connectRedis(session);
 
@@ -54,8 +56,8 @@ const main = async () => {
   await apolloServer.start(); //add to add this
   apolloServer.applyMiddleware({
     app,
-    cors: { credentials: true, origin: 'https://studio.apollographql.com' },
-  }); //this creates a grapghql endpoint for us.
+    cors: { credentials: true },
+  }); //this creates a grapghql endpoint for us. For CORS problems I removed the following option the the cors property. origin: 'https://studio.apollographql.com'. this got it to work with the front end, but might have broken the graphql playground
 
   // app.get('/', (_, res) => { .   // don't need this since we are using Graphql not REST
   //   res.send('HELLO');
